@@ -1,6 +1,17 @@
 $(document).ready(function(){
 	var libreta = new TLibreta;
 	$("#txtClave").focus();
+	
+	$("#winProductos").find("#tblDatos").DataTable({
+		"responsive": true,
+		"language": espaniol,
+		"paging": true,
+		"lengthChange": false,
+		"ordering": true,
+		"info": true,
+		"autoWidth": false
+	});
+			
 	getLista();
 	
 	$("#txtClave").keyup(function(event){
@@ -32,6 +43,10 @@ $(document).ready(function(){
 				case '002': //retiros
 					console.info("Iniciando ventana de retiros");
 					$("#winRetiros").modal();
+				break;
+				case '003':
+					$("#txtClave").val("").focus();
+					$("#winProductos").modal();
 				break;
 				default:
 					console.info("Buscando: " + $("#txtClave").val());
@@ -147,4 +162,30 @@ $(document).ready(function(){
 			});
         }
     });
+    
+    $("#winProductos").on('shown.bs.modal', function(e){
+		$("#winProductos").find("input").select();
+	});
+	
+	$("#winProductos").on('hidden.bs.modal', function(e){
+		$("#txtClave").focus();
+	});
+	
+	$("#winProductos").find("#tblDatos").find("tbody tr").click(function(){
+		var el = jQuery.parseJSON($(this).attr("datos"));
+		
+		libreta.addMovimiento({
+			"idProducto": el.idProducto,
+			"tipo": 1,
+			after: function(resp){
+				if (!resp.band){
+					alert("Ocurrió un error al agregar el registro");
+				}else{
+					$("#winProductos").modal("hide");
+					
+					getLista();
+				}
+			}
+		});
+	});
 });

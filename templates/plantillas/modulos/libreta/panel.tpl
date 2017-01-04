@@ -53,3 +53,43 @@
 		</div>
 	</div>
 </form>
+
+<div class="modal fade" id="winProductos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3>Productos</h3>
+			</div>
+			<div class="modal-body">
+				<table id="tblDatos" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th>Precio</th>
+						</tr>
+					</thead>
+					<tbody>
+						{foreach from=$productos item="row"}
+							<tr datos='{$row.json}'>
+								<td>{$row.clave}</td>
+								<td>{$row.descripcion}</td>
+								<td>{$row.precio}</td>
+							</tr>
+						{foreachelse}
+							<tr>
+								<td colspan="3" class="text-center">
+									Sin productos en el catálogo
+								</td>
+							</tr>
+						{/foreach}
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>

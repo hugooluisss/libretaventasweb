@@ -2,6 +2,19 @@
 global $objModulo;
 
 switch($objModulo->getId()){
+	case 'libreta':
+		$db = TBase::conectaDB();
+		$rs = $db->Execute("select * from producto where visible = true");
+		$datos = array();
+		while(!$rs->EOF){
+			$rs->fields['json'] = json_encode($rs->fields);
+			
+			array_push($datos, $rs->fields);
+			$rs->moveNext();
+		}
+		
+		$smarty->assign("productos", $datos);
+	break;
 	case 'listaLibreta':
 		$db = TBase::conectaDB();
 		$rs = $db->Execute("select a.monto as saldo, b.*, c.nombre as nombreTipo, c.operacion from libreta a join movimiento b using(idLibreta) join tipomov c using(idTipo) where fecha = '".date("Y-m-d")."' order by hora desc");
