@@ -64,10 +64,48 @@ $(document).ready(function(){
 			before: function(){
 				$("#txtClave").prop("disabled", true);
 			}, after: function(producto){
+				var clave = $("#txtClave").val();
 				$("#txtClave").prop("disabled", false);
+				$("#txtClave").val("");
+				
 				if (producto.idProducto == '' || producto.idProducto === undefined){
 					alert("Producto no encontrado");
-					$("#txtClave").val("").focus();
+					
+					var precio = prompt("¿Cual es el precio?");
+					if (!isNaN(precio)){
+						var producto = new TProducto();
+						producto.add({
+							"id": "",
+							"clave": clave,
+							"descripcion": "",
+							"precio": precio,
+							"costo": 0, 
+							"nota": "Sin descripción",
+							"almacen": 1,
+							"action": "add",
+							"after": function(resp){
+								if (resp.band){
+									alert("Producto agregado");
+									$("#txtClave").val("").focus();
+									libreta.addMovimiento({
+										"idProducto": resp.identificador,
+										"tipo": 1,
+										before: function(){
+											$("#txtClave").prop("disabled", true);
+										}, after: function(resp){
+											$("#txtClave").prop("disabled", false);
+											$("#txtClave").val("").focus();
+											
+											if (!resp.band){
+												alert("Ocurrió un error al agregar el producto");
+											}else
+												getLista();
+										}
+									});
+								}
+							}
+						}, "json");
+					}
 				}else{
 					libreta.addMovimiento({
 						"idProducto": producto.idProducto,

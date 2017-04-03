@@ -42,7 +42,7 @@ switch($objModulo->getId()){
 				$obj->setClave($_POST['clave']);
 				
 				if ($obj->guardar())
-					$smarty->assign("json", array("band" => true));
+					$smarty->assign("json", array("band" => true, "identificador" => $obj->getId()));
 				else
 					$smarty->assign("json", array("band" => false));
 				

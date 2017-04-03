@@ -234,6 +234,8 @@ class TProducto{
 				nota = '".$this->getNota()."'
 			WHERE idProducto = ".$this->getId());
 			
+			$db->Execute("update movimiento set descripcion = '".$this->getDescripcion()."' where clave = '".$this->getClave()."' and descripcion = ''");
+			
 		return $rs?true:false;
 	}
 	
